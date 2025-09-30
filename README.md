@@ -67,8 +67,8 @@ Below are the exported diagrams from MySQL Workbench. Click the images to view t
 Clone the repository:
 
 ```powershell
-git clone https://github.com/onmosa01/CollegeV1/
-cd CollegeV1
+git clone https://github.com/Beast1692/CollegeV2.git
+cd CollegeV2
 ```
 
 Import the .sql schema into MySQL Workbench.
@@ -77,6 +77,5 @@ Run the script to create tables and relationships.
 
 ## Authors
 
-[Ayden Riddle](https://www.github.com/ayridd03)
 [Nathan Mulholland](https://github.com/Beast1692)
-[Onalenna Mosadi](https://github.com/onmosa01)
+[Steven Cain](https://github.com/Stevencain3)
