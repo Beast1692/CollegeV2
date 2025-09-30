@@ -79,4 +79,3 @@ Run the script to create tables and relationships.
 
 [Nathan Mulholland](https://github.com/Beast1692)
 [Steven Cain](https://github.com/Stevencain3)
-Test
