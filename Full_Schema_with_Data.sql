@@ -286,57 +286,168 @@ CREATE TABLE IF NOT EXISTS `af25nathm1_collegev2`.`user` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 5;
 
+-- -----------------------------------------------------
+-- BULK SAMPLE DATA (For Stress Testing)
+-- -----------------------------------------------------
 
--- ========== Sample Data ==========
+-- Extra Departments
+INSERT INTO department (department_id, department_name, audit_user_id, employee_id) VALUES
+(401, 'Psychology', 1, 21),
+(402, 'Chemistry', 2, 22),
+(403, 'Physics', 3, 23),
+(404, 'Economics', 4, 24),
+(405, 'Anthropology', 1, 25),
+(406, 'Geography', 2, 26),
+(407, 'Statistics', 3, 27),
+(408, 'Linguistics', 4, 28),
+(409, 'Biotechnology', 1, 29),
+(410, 'Law', 2, 30);
 
--- Audit users
-INSERT INTO audit_user (username, password) VALUES
-('admin1', 'pass1'),
-('admin2', 'pass2'),
-('admin3', 'pass3'),
-('admin4', 'pass4');
+-- Extra Employees
+INSERT INTO employee (employee_start_date, employee_end_date, audit_user_id, lookup_employee_role_id) VALUES
+('2010-08-15', NULL, 1, 1), -- id 21
+('2012-09-01', NULL, 2, 2), -- id 22
+('2015-01-05', NULL, 3, 3), -- id 23
+('2011-06-20', NULL, 4, 4), -- id 24
+('2013-03-18', NULL, 1, 5), -- id 25
+('2014-04-25', NULL, 2, 6), -- id 26
+('2017-07-10', NULL, 3, 7), -- id 27
+('2018-02-28', NULL, 4, 8), -- id 28
+('2016-10-12', NULL, 1, 2), -- id 29
+('2020-05-19', NULL, 2, 3); -- id 30
 
--- Employees
-INSERT INTO employee (first_name, last_name, audit_user_id) VALUES
-('John', 'Doe', 1),
-('Jane', 'Smith', 2),
-('Alan', 'Turing', 3),
-('Grace', 'Hopper', 4);
+-- Extra Students
+INSERT INTO student (student_admission_date, student_graduation_date, audit_user_id) VALUES
+('2020-09-01', NULL, 1),
+('2021-01-10', NULL, 2),
+('2019-08-20', '2023-05-15', 3),
+('2022-02-01', NULL, 4),
+('2018-08-25', '2022-05-20', 1),
+('2025-01-10', NULL, 2),
+('2025-08-21', NULL, 3),
+('2017-09-01', '2021-05-10', 4),
+('2019-01-15', '2023-05-25', 1),
+('2023-09-01', NULL, 2),
+('2022-09-01', NULL, 3),
+('2021-08-25', NULL, 4),
+('2020-09-05', '2024-05-15', 1),
+('2016-08-30', '2020-05-15', 2),
+('2018-09-01', '2022-05-15', 3),
+('2019-09-01', NULL, 4),
+('2024-01-10', NULL, 1),
+('2025-01-20', NULL, 2),
+('2023-08-30', NULL, 3),
+('2022-01-10', NULL, 4);
 
--- Departments (IDs auto-generated now)
-INSERT INTO department (department_name, audit_user_id, employee_id) VALUES
-('Computer Science', 1, 1),
-('Mathematics', 2, 2),
-('History', 3, 3),
-('Business Administration', 4, 4);
+-- Extra Courses
+INSERT INTO course (course_name, course_credit_hours, audit_user_id) VALUES
+('Cognitive Psychology', 3, 1),
+('Organic Chemistry', 4, 2),
+('Quantum Physics', 4, 3),
+('Microeconomics', 3, 4),
+('Cultural Anthropology', 3, 1),
+('GIS Mapping', 3, 2),
+('Applied Statistics', 4, 3),
+('Phonetics', 3, 4),
+('Genetic Engineering', 4, 1),
+('Business Law', 3, 2),
+('Clinical Psychology', 4, 3),
+('Physical Chemistry', 4, 4),
+('Astrophysics', 4, 1),
+('Macroeconomics', 3, 2),
+('Archaeology', 3, 3),
+('Urban Geography', 3, 4),
+('Probability Theory', 4, 1),
+('Syntax and Semantics', 3, 2),
+('Molecular Biology', 4, 3),
+('Constitutional Law', 3, 4);
 
--- Courses
-INSERT INTO course (course_name, department_id) VALUES
-('Intro to CS', 1),
-('Algorithms', 1),
-('Calculus I', 2),
-('World History', 3),
-('Business Ethics', 4);
+-- Extra Semesters
+INSERT INTO semester (semester_id, semester_season, audit_user_id) VALUES
+(8, 'Spring 2027', 1),
+(9, 'Fall 2027', 2),
+(10, 'Spring 2028', 3),
+(11, 'Fall 2028', 4),
+(12, 'Spring 2029', 1),
+(13, 'Fall 2029', 2),
+(14, 'Spring 2030', 3),
+(15, 'Fall 2030', 4),
+(16, 'Spring 2031', 1),
+(17, 'Fall 2031', 2);
 
--- Semesters
-INSERT INTO semester (semester_name, year) VALUES
-('Fall', 2025),
-('Spring', 2026);
+-- Extra Enrollments (students 21-40 mapped into semesters 8-17)
+INSERT INTO enrollment (enrollment_status, audit_user_id, student_student_id, semester_id, lookup_grade_id) VALUES
+('Active', 1, 21, 8, 1),
+('Completed', 2, 22, 8, 2),
+('Active', 3, 23, 9, 3),
+('Withdrawn', 4, 24, 9, 5),
+('Active', 1, 25, 10, 1),
+('Completed', 2, 26, 10, 2),
+('Active', 3, 27, 11, 4),
+('Active', 4, 28, 11, 3),
+('Completed', 1, 29, 12, 2),
+('Completed', 2, 30, 12, 1),
+('Withdrawn', 3, 31, 13, 5),
+('Active', 4, 32, 13, 3),
+('Completed', 1, 33, 14, 2),
+('Active', 2, 34, 14, 1),
+('Completed', 3, 35, 15, 2),
+('Active', 4, 36, 15, 3),
+('Withdrawn', 1, 37, 16, 5),
+('Completed', 2, 38, 16, 2),
+('Active', 3, 39, 17, 1),
+('Completed', 4, 40, 17, 2);
 
--- Students
-INSERT INTO student (first_name, last_name, audit_user_id) VALUES
-('Alice', 'Brown', 1),
-('Bob', 'White', 2),
-('Charlie', 'Green', 3),
-('Diana', 'Black', 4);
+-- Extra Sections
+INSERT INTO section (section_days, section_times, section_delivery_method, course_id, employee_id, student_id) VALUES
+('MWF', '08:00-08:50', 'In-Person', 21, 21, 21),
+('TTh', '09:30-10:45', 'Online', 22, 22, 22),
+('MWF', '11:00-11:50', 'Hybrid', 23, 23, 23),
+('TTh', '13:00-14:15', 'In-Person', 24, 24, 24),
+('MWF', '14:00-14:50', 'Online', 25, 25, 25),
+('TTh', '15:30-16:45', 'In-Person', 26, 26, 26),
+('MWF', '16:00-16:50', 'In-Person', 27, 27, 27),
+('TTh', '10:00-11:15', 'Hybrid', 28, 28, 28),
+('MWF', '09:00-09:50', 'Online', 29, 29, 29),
+('TTh', '14:00-15:15', 'In-Person', 30, 30, 30);
 
--- Enrollments
-INSERT INTO enrollment (student_id, course_id, semester_id) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 2),
-(4, 4, 2),
-(1, 5, 1);
+-- Extra Rooms
+INSERT INTO building (building_name, building_room_number, building_room_capacity) VALUES
+('Psychology Hall', 101, 60),
+('Chemistry Center', 202, 100),
+('Physics Tower', 303, 120),
+('Economics Building', 404, 90),
+('Anthropology Annex', 505, 50),
+('Geography Center', 606, 70),
+('Statistics Hall', 707, 80),
+('Linguistics Block', 808, 40),
+('Biotech Lab', 909, 30),
+('Law Building', 1001, 150);
+
+INSERT INTO room (room_name, room_capacity, audit_user_id, section_id, student_id, building_id, employee_id) VALUES
+('Psych 101A', 60, 1, 21, 21, 401, 21),
+('Chem 202B', 100, 2, 22, 22, 402, 22),
+('Phys 303C', 120, 3, 23, 23, 403, 23),
+('Econ 404D', 90, 4, 24, 24, 404, 24),
+('Anthro 505E', 50, 1, 25, 25, 405, 25),
+('Geo 606F', 70, 2, 26, 26, 406, 26),
+('Stats 707G', 80, 3, 27, 27, 407, 27),
+('Ling 808H', 40, 4, 28, 28, 408, 28),
+('Biotech 909I', 30, 1, 29, 29, 409, 29),
+('Law 1001J', 150, 2, 30, 30, 410, 30);
+
+-- Extra Course-Department Links
+INSERT INTO course_has_department (department_id, course_id) VALUES
+(401, 21),
+(402, 22),
+(403, 23),
+(404, 24),
+(405, 25),
+(406, 26),
+(407, 27),
+(408, 28),
+(409, 29),
+(410, 30);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
