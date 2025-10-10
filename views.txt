@@ -1,0 +1,80 @@
+CREATE VIEW `25afnathm1` `vw_enrollment_details` AS
+SELECT
+    en.enrollment_id,
+    en.enrollment_status,
+    en.enrolment_created,            -- note the single “l”
+    en.audit_user_id,
+    en.enrollment_audited,
+    en.student_student_id AS student_id,
+    s.student_admission_date,
+    s.student_graduation_date,
+    u.user_fname AS student_fname,
+    u.user_lname AS student_lname,
+    en.semester_id,
+    sem.semester_season,
+    en.lookup_grade_id,
+    lg.lookup_grade_letter,
+    lg.lookup_grade_point_value,
+    COALESCE(lg.lookup_grade_point_value, 0) AS grade_point_or_zero
+FROM enrollment en
+LEFT JOIN student s ON s.student_id = en.student_student_id
+LEFT JOIN user u ON u.student_id = s.student_id
+LEFT JOIN semester sem ON sem.semester_id = en.semester_id
+LEFT JOIN lookup_grade lg ON lg.lookup_grade_id = en.lookup_grade_id;
+
+CREATE VIEW `25afnathm1` `vw_course_schedule` AS
+SELECT 
+    sec.section_id,
+    c.course_id,
+    c.course_name,
+    sec.section_days,
+    sec.section_times,
+    sec.section_delivery_method,
+    emp.employee_id AS instructor_id,
+    emp.employee_start_date,
+    u.user_fname AS instructor_fname,
+    u.user_lname AS instructor_lname,
+    r.room_id,
+    r.room_name,
+    r.room_capacity,
+    b.building_id,
+    b.building_name
+FROM section sec
+LEFT JOIN course c ON c.course_id = sec.course_id
+LEFT JOIN employee emp ON emp.employee_id = sec.employee_id
+LEFT JOIN user u ON u.employee_employee_id = emp.employee_id
+LEFT JOIN room r ON r.section_id = sec.section_id
+LEFT JOIN building b ON b.building_id = r.building_id;
+
+CREATE VIEW `25afnathm1` `vw_student_enrollment_summary` AS
+SELECT 
+    s.student_id,
+    u.user_fname AS first_name,
+    u.user_lname AS last_name,
+    COUNT(e.enrollment_id) AS total_enrollments,
+    SUM(e.enrollment_status = 'Active') AS active_enrollments,
+    SUM(e.enrollment_status = 'Completed') AS complete_enrollments,
+    SUM(e.enrollment_status = 'Withdrawn') AS withdrawn_enrollments,
+    MAX(e.semester_id) AS latest_semester_id,
+    AVG(lg.lookup_grade_point_value) AS avg_grade_point
+FROM student s
+LEFT JOIN user u ON u.student_id = s.student_id
+LEFT JOIN enrollment e ON e.student_student_id = s.student_id
+LEFT JOIN lookup_grade lg ON lg.lookup_grade_id = e.lookup_grade_id
+GROUP BY s.student_id, u.user_fname, u.user_lname;
+
+CREATE VIEW `25afnathm1` `vw_department_course_counts` AS
+SELECT
+    d.department_id,
+    d.department_name,
+    d.employee_id AS department_head_employee_id,
+    u.user_fname AS head_fname,
+    u.user_lname AS head_lname,
+    COUNT(chd.course_id) AS course_count,
+    GROUP_CONCAT(DISTINCT c.course_name ORDER BY c.course_name SEPARATOR ', ') AS courses_list
+FROM department d
+LEFT JOIN course_has_department chd ON chd.department_id = d.department_id
+LEFT JOIN course c ON c.course_id = chd.course_id
+LEFT JOIN employee e ON e.employee_id = d.employee_id
+LEFT JOIN user u ON u.employee_employee_id = e.employee_id
+GROUP BY d.department_id, d.department_name, d.employee_id, u.user_fname, u.user_lname;
