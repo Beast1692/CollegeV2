@@ -1,0 +1,79 @@
+# for seeing wich instructors teach which class in what room and when
+CREATE VIEW `af25stevc1` 'sections_with_rooms_view' AS
+SELECT 
+    sec.section_id,
+    c.course_name,
+    r.room_name,
+    r.room_capacity,
+    b.building_name,
+    sec.section_days,
+    sec.section_times,
+    sec.section_delivery_method,
+    emp.employee_id,
+    ue.user_fname AS instructor_fname,
+    ue.user_lname AS instructor_lname
+FROM section sec
+JOIN course c ON sec.course_id = c.course_id
+JOIN room r ON r.section_id = sec.section_id
+JOIN building b ON r.building_id = b.building_id
+JOIN employee emp ON sec.employee_id = emp.employee_id
+JOIN user ue ON ue.employee_employee_id = emp.employee_id;
+
+
+
+# shows graduated students with a GPA above 3.5
+CREATE VIEW 'af25stevc1' 'graduated_students_high_gpa_view' AS grad
+SELECT 
+    s.student_id,
+    u.user_fname,
+    u.user_lname,
+    s.student_admission_date,
+    s.student_graduation_date,
+    ROUND(AVG(lg.lookup_grade_point_value), 2) AS gpa,
+    COUNT(e.enrollment_id) AS completed_courses
+FROM student s
+JOIN user u ON u.student_id = s.student_id
+JOIN enrollment e ON e.student_student_id = s.student_id
+JOIN lookup_grade lg ON lg.lookup_grade_id = e.lookup_grade_id
+WHERE 
+    s.student_graduation_date IS NOT NULL
+    AND e.enrollment_status = 'Completed'
+GROUP BY 
+    s.student_id, u.user_fname, u.user_lname, s.student_admission_date, s.student_graduation_date
+HAVING 
+    gpa > 3.5;
+
+
+
+#shows all employes with there roles and basic user information
+CREATE VIEW 'af25stevc1' 'instructor_by_role_view' AS
+SELECT 
+    e.employee_id,
+    u.user_fname,
+    u.user_lname,
+    ler.lookup_employee_role_name AS role_name,
+    ler.lookup_employee_role_security_level AS security_level,
+    e.employee_start_date,
+    e.employee_end_date
+FROM employee e
+JOIN lookup_employee_role ler ON e.lookup_employee_role_id = ler.lookup_employee_role_id
+LEFT JOIN user u ON u.employee_employee_id = e.employee_id
+ORDER BY ler.lookup_employee_role_security_level DESC, u.user_lname;
+
+
+#lists each student with all the semseters they have taken aswell as thier basic status
+CREATE VIEW  'af25stevc1' 'semesters_by_student_view'  AS
+SELECT 
+    s.student_id,
+    u.user_fname,
+    u.user_lname,
+    sem.semester_id,
+    sem.semester_season,
+    e.enrollment_status,
+    e.enrolment_created,
+    e.enrollment_audited
+FROM student s
+JOIN user u ON u.student_id = s.student_id
+JOIN enrollment e ON e.student_student_id = s.student_id
+JOIN semester sem ON sem.semester_id = e.semester_id
+ORDER BY s.student_id, sem.semester_id;
