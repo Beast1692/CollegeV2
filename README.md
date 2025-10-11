@@ -1,6 +1,8 @@
 # 📚 Student Information System Database
 
 A relational Student Information System (SIS) database designed for Students, Faculty, and Admins to manage grades, enrollment, courses, rooms, and departments.
+[![MariaDB](https://img.shields.io/badge/MariaDB-003545?logo=mariadb&logoColor=white)](#)
+[![MySQL](https://img.shields.io/badge/MySQL-4479A1?logo=mysql&logoColor=fff)](#)
 
 ## Table of Contents
 
@@ -43,6 +45,24 @@ Below are the exported diagrams from MySQL Workbench. Click the images to view t
 
 [![Catalog Tree](assets/Catalog_Tree.png)](assets/Catalog_Tree.png)
 *Catalog Tree — shows the list of tables in the generated schema.*
+
+##  Views
+
+The database includes several custom **SQL views** to simplify querying and reporting across core entities like students, instructors, courses, and academic performance. These views were created to answer common questions and support administrative tasks.
+
+###  Implemented Views
+
+| View Name                        | Description                                                                 |
+|----------------------------------|-----------------------------------------------------------------------------|
+| `sections_with_rooms_view`      | Displays which instructors are teaching which courses, in which rooms, and at what times. Includes course name, room details, and instructor info. |
+| `graduated_students_high_gpa_view` | Lists all students who have **graduated** with a **GPA above 3.5**, including their admission/graduation dates and GPA. |
+| `instructor_by_role_view`       | Shows employees with their assigned role titles, security levels, and personal details. Helps identify faculty/staff structure. |
+| `semesters_by_student_view`     | Lists all semesters each student has been enrolled in, including enrollment status (e.g., Active, Completed, Withdrawn). Useful for tracking student progress over time. |
+
+> These views were built using `JOIN`, `GROUP BY`, `HAVING`, and `ORDER BY` clauses, and tested on sample data generated using `INSERT` statements.  
+> They are reusable across reporting tools or integrations with front-end dashboards.
+
+
 
 ### Key Tables
 
